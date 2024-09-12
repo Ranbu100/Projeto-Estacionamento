@@ -7,11 +7,11 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    backgroundImage: {
+      'background_estacionamento' : "url('../src/assets/images/background_estacionamento.jpeg')"
+    },
     extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
+      colors: {'primary-blue' : '#106E80',},
     },
   },
   plugins: [],
