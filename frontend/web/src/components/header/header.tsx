@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Logo_header from "./../../assets/images/logo_header.svg";
+import Logo_header from "../../../public/images/logo_header.svg";
 import { ItemMenu } from "./itemMenu";
 import { Login } from "./login_button";
 import { Cadastro } from "./register_button";
@@ -9,11 +9,12 @@ export function Header() {
         <header className="flex items-center w-full h-24 bg-blue-900">
             <div className="flex flex-wrap items-center w-full max-w-[1246px] px-4 mx-auto justify-between">
                 <div className="flex items-center gap-4 sm:gap-14">
-                    <Image src={Logo_header} alt="Logo" className="w-10 h-10 sm:w-auto sm:h-auto" />
-                    <h1 className="text-white text-2xl md:text-3xl font-bold ">Estacionamentos LTDA</h1>
+                    <Image src={Logo_header} alt="Logo" className="w-auto h-12 sm:w-auto sm:h-auto" />
+                    <span className="text-xl text-white  sm:text-3xl font-bold">Estacionamentos LTDA</span>
+                    
                 </div>
 
-                <div className="hidden lg:flex items-center gap-8">
+                <div className="hidden lg:flex lg:items-center lg:gap-8">
                     <ul className="flex items-center gap-4 sm:gap-8 justify-between">
                         <ItemMenu nome="Sobre nós" />
                         <ItemMenu nome="Contato" />
