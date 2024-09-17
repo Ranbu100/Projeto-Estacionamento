@@ -1,7 +1,6 @@
 package config
 
-import ( 
-
+import (
 	"os"
 
 	"github.com/Ranbu100/Projeto-Estacionamento/schemas"
@@ -25,7 +24,7 @@ func InitializePostgres() (*gorm.DB, error) {
 		}
 
 		// Criando o arquivo do banco de dados
-		file, err := os.Create(dbPath) // Correção: não usar `nmae:`, passe o valor diretamente
+		file, err := os.Create(dbPath)
 		if err != nil {
 			return nil, err
 		}
@@ -33,7 +32,7 @@ func InitializePostgres() (*gorm.DB, error) {
 	}
 
 	// Conectando ao banco de dados Postgres
-	dsn := "user=nicholas password=qwe123 dbname=estacionamento port=5432 sslmode=disable TimeZone=Brazil"
+	dsn := "host=localhost user=postgres password=qwer1234 dbname=bd_estacionamento port=5432 sslmode=disable TimeZone=America/Sao_Paulo"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		logger.Errorf("postgres opening error: %v", err) // Corrigido para passar os parâmetros corretamente
