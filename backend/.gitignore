@@ -1,0 +1,13 @@
+*.exe
+*.dll
+*.so
+*.dylib
+
+#test bin
+
+*.test
+
+*.out
+
+Db folder
+db/
