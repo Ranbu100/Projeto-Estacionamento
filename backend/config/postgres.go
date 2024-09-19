@@ -10,15 +10,15 @@ import (
 
 func InitializePostgres() (*gorm.DB, error) {
 	logger := GetLogger("postgres")
-	dbPath := "./db/main.db" // Correção: remover tipo explícito na inicialização
+	dbPath := "./db/main.db"
 
 	// Verificando se o DB existe
-	_, err := os.Stat(dbPath) // Correção: remover `_ fs.FileInfo`
+	_, err := os.Stat(dbPath)
 	if os.IsNotExist(err) {
 		logger.Info("database não encontrado, criando...")
 
 		// Criando o diretório
-		err = os.MkdirAll("./db", os.ModePerm) // Correção: não usar `path:`, passe o valor diretamente
+		err = os.MkdirAll("./db", os.ModePerm)
 		if err != nil {
 			return nil, err
 		}
@@ -35,12 +35,12 @@ func InitializePostgres() (*gorm.DB, error) {
 	dsn := "host=localhost user=postgres password=qwer1234 dbname=bd_estacionamento port=5432 sslmode=disable TimeZone=America/Sao_Paulo"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		logger.Errorf("postgres opening error: %v", err) // Corrigido para passar os parâmetros corretamente
+		logger.Errorf("postgres opening error: %v", err)
 		return nil, err
 	}
 
-	// Automigrate
-	err = db.AutoMigrate(&schemas.Opening{}) // Passagem correta da estrutura para automigrate
+	// Automigrate para as structs corretas
+	err = db.AutoMigrate(&schemas.Usuarios{}, &schemas.Vagas{}, &schemas.Veiculos{}, &schemas.EntradasSaidas{}, &schemas.Pagamentos{}, &schemas.Tarifas{})
 	if err != nil {
 		logger.Errorf("postgres automigration error: %v", err)
 		return nil, err
