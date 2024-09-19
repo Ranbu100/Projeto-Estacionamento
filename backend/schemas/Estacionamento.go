@@ -13,7 +13,7 @@ type Usuarios struct {
 
 type Vagas struct {
 	ID         uint   `gorm:"primaryKey;autoIncrement" json:"id"`
-	Numerovaga int    `gorm:"not null" json:"numero_vaga"`
+	NumeroVaga int    `gorm:"not null" json:"numero_vaga"`
 	TipoVaga   string `gorm:"size:50;not null" json:"tipo_vaga"`
 	Status     string `gorm:"size:50;not null" json:"status_vaga"`
 }
