@@ -1,19 +1,19 @@
 'use client'
 import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
 type Props = {
     nome: string;
     route: string;
 }
 
-export function ItemMenu({nome} : Props, {route}: Props){
+export function ItemMenu({nome, route} : Props){
     const Router = useRouter();
     return (
-        <button 
-        type="button"
+        <Button variant="link"
         className="flex items-center gap-1 sm:gap-3"
         onClick={() => Router.push(route)}>
             <span className="text-white">{nome}</span>
-        </button>
+        </Button>
     )
 }
