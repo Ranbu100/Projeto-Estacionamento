@@ -195,8 +195,17 @@ func LoginHandler(ctx *gin.Context) {
 		return
 	}
 
+	//gerar o token jwt
+	tokenString, err :=
+		utils.GenerateJWT(usuario.Email, usuario.TipoUsuario)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao gerar o token"})
+		return
+	}
+
 	// Se a senha estiver correta
-	ctx.JSON(http.StatusOK, gin.H{"message": "Login bem-sucedido"})
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Login bem-sucedido", "token": tokenString})
 }
 func CreateVagasHandler(c *gin.Context) {
 	var input struct {
