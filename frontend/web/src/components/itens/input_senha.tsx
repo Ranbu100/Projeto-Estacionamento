@@ -8,9 +8,11 @@ interface Props {
     isVisible: boolean;
     onChangeVisibility: () => void;
     label: string;
+    value?: string;
+    onChange?: (e: any) => void;
 
 }
-export function Senhainput({ isVisible, onChangeVisibility, label }: Props) {
+export function Senhainput({ isVisible, onChangeVisibility, label, value, onChange }: Props) {
     const showPassword =  isVisible ? "text" : "password";
     const showIcon = isVisible ? <EyeOpenIcon className="h-4 w-4 " /> : <EyeClosedIcon className="h-4 w-4" />;
     return (
@@ -18,7 +20,7 @@ export function Senhainput({ isVisible, onChangeVisibility, label }: Props) {
             <Label htmlFor="senha" className="text-white">{label}</Label>
             <div className="flex gap-3">
                 <Input id="senha" type={showPassword} placeholder="Escreva a sua senha" className="text-white" />
-                <Button variant="ghost" size="icon" onClick={onChangeVisibility} type="button" className="text-white bg-blue-900">
+                <Button value={value} onChange={onChange} variant="ghost" size="icon" onClick={onChangeVisibility} type="button" className="text-white bg-blue-900">
                     {showIcon}
                 </Button>
             </div>
