@@ -110,11 +110,21 @@ func CreateReservasHandler(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "Reserva criada com sucesso"})
 }
 
+// @Summary Cria um usuário
+// @Description Cria um novo usuário no sistema
+// @Tags usuários
+// @Accept  json
+// @Produce  json
+// @Param   usuario  body  handler.CreateUsuarioInput  true  "Dados do usuário"
+// @Success 201 {object} gin.H{"message": "Usuário criado com sucesso"}
+// @Failure 400 {object} gin.H{"error": "Dados inválidos"}
+// @Router /usuarios [post]
 func CreateUsuariosHandler(c *gin.Context) {
 	var input struct {
-		Nome  string `json:"nome"`
-		Email string `json:"email"`
-		Senha string `json:"senha"`
+		Nome     string `json:"nome"`
+		Email    string `json:"email"`
+		Senha    string `json:"senha"`
+		Telefone string `json:"telefone"`
 	}
 
 	// Bind JSON para a struct de input
