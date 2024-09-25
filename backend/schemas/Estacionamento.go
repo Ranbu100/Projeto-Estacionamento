@@ -47,3 +47,11 @@ type Tarifas struct {
 	Descricao string  `gorm:"size:100;not null" json:"descricao"`
 	Valor     float64 `gorm:"type:decimal(10,2);not null" json:"valor"`
 }
+type Reservas struct {
+	ID        uint      `gorm:"primaryKey;autoIncrement" json:"id"`
+	UsuarioId uint      `gorm:"not null" json:"usuario_id"`
+	VagaId    uint      `gorm:"not null" json:"vaga_id"`
+	DataHora  time.Time `gorm:"not null" json:"data_hora_reserva"`
+	Duracao   uint      `gorm:"not null" json:"duracao"`
+	Status    string    `gorm:"size:50;not null" json:"status_reserva"`
+}
