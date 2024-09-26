@@ -3,7 +3,7 @@ import { Button } from "../ui/button"
 
 type Props = {
     classname?: string;
-    link: string;
+    link?: string;
     classname_text?: string;
     type_button?: "submit" | "reset" | "button";
     onClick?: (e: any) => void;
@@ -17,7 +17,7 @@ export function Registerbutton({classname,classname_text,link, type_button, onCl
         type={type_button}
         onClick={onClick}
         >
-            <Link href={link} className={classname_text}>Cadastro</Link>
+            <Link href={link || ''} className={classname_text}>Cadastro</Link>
         </Button>
     )
 }

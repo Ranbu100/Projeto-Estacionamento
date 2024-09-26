@@ -1,7 +1,7 @@
-import { Registerform } from "@/components/registerform/registerform";
+import Registerform from "@/components/registerform/registerform";
 
-export default function Home(){
+export default function Home() {
     return (
-       <Registerform/>
+        <Registerform />
     )
 }
