@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/Ranbu100/Projeto-Estacionamento/config"
-	_ "github.com/Ranbu100/Projeto-Estacionamento/docs"
 	"github.com/Ranbu100/Projeto-Estacionamento/router"
 )
 
