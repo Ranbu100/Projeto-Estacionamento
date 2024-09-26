@@ -2,7 +2,9 @@ package config
 
 import (
 	"fmt"
+	"log"
 
+	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 )
 
@@ -13,6 +15,11 @@ var (
 
 func Init() error {
 	var err error
+
+	//Carregando as variaveis de ambiente
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("Erro ao carregar arquivo .env")
+	}
 
 	//inicalizando postgres
 	db, err = InitializePostgres()
