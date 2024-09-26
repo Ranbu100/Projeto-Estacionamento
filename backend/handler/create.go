@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/Ranbu100/Projeto-Estacionamento/middleware"
 	"github.com/Ranbu100/Projeto-Estacionamento/schemas"
 	"github.com/Ranbu100/Projeto-Estacionamento/utils"
 	"github.com/gin-gonic/gin"
@@ -149,9 +150,10 @@ func CreateUsuariosHandler(c *gin.Context) {
 
 	// Criar o novo usuário
 	usuario := schemas.Usuarios{
-		Nome:  input.Nome,
-		Email: input.Email,
-		Senha: hashedPassword,
+		Nome:     input.Nome,
+		Email:    input.Email,
+		Senha:    hashedPassword,
+		Telefone: input.Telefone,
 	}
 	if err := db.Create(&usuario).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao salvar usuário no banco de dados"})
@@ -160,6 +162,7 @@ func CreateUsuariosHandler(c *gin.Context) {
 	logger.Info("Usuário criado com sucesso: ", input.Email)
 	c.JSON(http.StatusCreated, gin.H{"message": "Usuário criado com sucesso"})
 }
+
 func LoginHandler(ctx *gin.Context) {
 	var input struct {
 		Email string `json:"email"`
@@ -178,7 +181,13 @@ func LoginHandler(ctx *gin.Context) {
 
 	// Caso seja admin, checar as credenciais diretamente
 	if input.Email == adminEmail && input.Senha == adminSenha {
-		ctx.JSON(http.StatusOK, gin.H{"message": "Login de admin bem-sucedido!"})
+		// Gerar token JWT para o admin
+		token, err := middleware.GenerateJWT("admin")
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao gerar token"})
+			return
+		}
+		ctx.JSON(http.StatusOK, gin.H{"token": token, "message": "Login de admin bem-sucedido!"})
 		return
 	}
 
@@ -195,18 +204,17 @@ func LoginHandler(ctx *gin.Context) {
 		return
 	}
 
-	//gerar o token jwt
-	tokenString, err :=
-		utils.GenerateJWT(usuario.Email, usuario.TipoUsuario)
+	// Gerar token JWT para o usuário comum
+	token, err := middleware.GenerateJWT(usuario.Email)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao gerar o token"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao gerar token"})
 		return
 	}
 
 	// Se a senha estiver correta
-	ctx.JSON(http.StatusOK, gin.H{
-		"message": "Login bem-sucedido", "token": tokenString})
+	ctx.JSON(http.StatusOK, gin.H{"token": token, "message": "Login bem-sucedido"})
 }
+
 func CreateVagasHandler(c *gin.Context) {
 	var input struct {
 		NumeroVaga int    `json:"numero_vaga"`
