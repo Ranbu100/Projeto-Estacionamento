@@ -14,6 +14,12 @@ import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 export default function RegisterForm() {
   const { control, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(formSchema),
+    defaultValues: {
+      nome: '',
+      email: '',
+      senha: '',
+      confirmaSenha: ''
+    },
   });
 
   const [isRegistered, setIsRegistered] = useState(false);
@@ -46,11 +52,11 @@ export default function RegisterForm() {
       <CardContent>
     
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
-        <RenderField control={control} name="nome" label="Nome" errors={errors} type={undefined} defaultValue={''} />
-        <RenderField control={control} name="email" label="Email" errors={errors} type={undefined} defaultValue={''} />
+        <RenderField control={control} name="nome" label="Nome" errors={errors} type={undefined}  />
+        <RenderField control={control} name="email" label="Email" errors={errors} type={undefined}  />
         <RenderField control={control} name="senha" label="Senha" type="senha" errors={errors}  />
         <RenderField control={control} name="confirmaSenha" label="Confirme sua senha" type="confirmarsenha" errors={errors} />
-        <RenderField control={control} name="telefone" label="Telefone" errors={errors} type={undefined} defaultValue={''} />
+        <RenderField control={control} name="telefone" label="Telefone" errors={errors} type={'telefone'}  />
         <Button className="bg-white text-blue-900 py-1" type="submit">Registrar</Button>
       </form>
 

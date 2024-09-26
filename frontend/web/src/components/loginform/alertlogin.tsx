@@ -23,7 +23,7 @@ import {
               <AlertDialogTitle>Login Realizado com Sucesso</AlertDialogTitle>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogAction onClick={() => { router.push("/") }} >Entrar</AlertDialogAction>
+              <AlertDialogAction onClick={() => { router.push("/home") }} >Entrar</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

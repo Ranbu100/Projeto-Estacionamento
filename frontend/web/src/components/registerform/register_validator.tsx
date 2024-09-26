@@ -7,5 +7,7 @@ export const formSchema = yup.object().shape({
   confirmaSenha: yup.string()
     .oneOf([yup.ref('senha')], 'As senhas devem corresponder')
     .required("Confirmação de senha é obrigatória"),
-  telefone: yup.string().required("Telefone é obrigatório"),
+  telefone: yup.string()
+    .required("Telefone é obrigatório")
+    .matches(/^\(\d{2}\) \d{5}-\d{4}$/, "Telefone deve estar no formato (xx) xxxxx-xxxx"), // Regex para validar o telefone
 });

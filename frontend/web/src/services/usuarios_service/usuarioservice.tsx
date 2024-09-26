@@ -1,23 +1,30 @@
+'use client'
 
-import { AlertRegisterConfirm } from "@/components/registerform/register_confirm";
 import { axiosInstance } from "../axiosinstance";
 import { AxiosResponse } from "axios";
 import { LoginUserResponse, UserData } from "@/lib/types/usertypes";
+import { useEffect } from "react";
 
+interface LoginResp {
+    message: string;
+    token: string;
+}
 
 export class UsuarioService {
     async LoginUser(userData: UserData): Promise<LoginUserResponse> {
         try {
-            const response = await axiosInstance.post<string, AxiosResponse<string, UserData>, UserData>("/api/v1/login", userData, {
+            const response = await axiosInstance.post<LoginResp, AxiosResponse<LoginResp, UserData>, UserData>("/api/v1/login", userData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
 
             });
 
-            if (response.status == 201) {
+            if (response.status == 200) {
                 console.log('Login realizado com sucesso!');
                 console.log(response.status);
+                const { token } = response.data;
+                console.log(token);
                 return { success: true }
             } else {
                 console.log('Erro no login:', response.status);
