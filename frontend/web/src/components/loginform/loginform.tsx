@@ -27,7 +27,7 @@ export function Loginform() {
         senha: data.senha,
       });
 
-      if (logged) {
+      if (logged.success) {
         setIsLogged(true);
       }
     } catch (error) {

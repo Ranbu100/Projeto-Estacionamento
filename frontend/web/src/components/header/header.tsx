@@ -18,8 +18,6 @@ export function Header() {
                         >Estacionamentos LTDA
                         </button>
                     </div>
-                    
-                    
                 </div>
 
                 <div className="flex items-center gap-2">
