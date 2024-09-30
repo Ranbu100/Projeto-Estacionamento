@@ -3,7 +3,6 @@
 import { axiosInstance } from "../axiosinstance";
 import { AxiosResponse } from "axios";
 import { LoginUserResponse, UserData } from "@/lib/types/usertypes";
-import { useEffect } from "react";
 
 interface LoginResp {
     message: string;
@@ -32,8 +31,8 @@ export class UsuarioService {
             }
 
         } catch (error) {
-            console.error("Erro ao cadastrar o usuario", error);
-            return { success: false, message: "" };
+            console.error("Erro ao logar o usuario", error);
+            return { success: false};
         }
     }
     GetAllUser() {
