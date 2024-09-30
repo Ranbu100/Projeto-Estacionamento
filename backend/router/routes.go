@@ -27,7 +27,7 @@ func InitializeRoutes(router *gin.Engine) {
 	{
 		// Rotas públicas (sem proteção JWT)
 		v1.POST("/login", handler.LoginHandler) // Login e geração do token JWT
-
+		v1.POST("/usuario", handler.CreateUsuariosHandler)
 		// Rotas protegidas com JWT
 		v1.Use(middleware.AuthMiddleware())
 		{

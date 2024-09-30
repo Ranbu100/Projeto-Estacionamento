@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -9,6 +10,7 @@ import (
 	"github.com/Ranbu100/Projeto-Estacionamento/schemas"
 	"github.com/Ranbu100/Projeto-Estacionamento/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 func CreateEntradasSaidasHandler(ctx *gin.Context) {
@@ -67,6 +69,12 @@ func CreatePagamentosHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados invalidos"})
 		return
 	}
+
+	if err := validate.Struct(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	pagamentos := schemas.Pagamentos{
 		EntradasSaidasId: input.EntradasSaidasId,
 		Valor:            input.Valor,
@@ -92,6 +100,13 @@ func CreateReservasHandler(c *gin.Context) {
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
 		return
+	}
+
+	if err := validate.Struct(&input); err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("O campo %s esta invalido", err.Field())})
+			return
+		}
 	}
 
 	// Criar nova reserva
@@ -131,6 +146,12 @@ func CreateUsuariosHandler(c *gin.Context) {
 	// Bind JSON para a struct de input
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
+		return
+	}
+
+	//Validar a struct de entrada (input)
+	if err := validate.Struct(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -227,6 +248,12 @@ func CreateVagasHandler(c *gin.Context) {
 		return
 	}
 
+	//Validaçao vagas
+	if err := validate.Struct(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	// Criar nova vaga
 	vaga := schemas.Vagas{
 		NumeroVaga: input.NumeroVaga,
@@ -252,6 +279,11 @@ func CreateVeiculosHandler(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
+		return
+	}
+
+	if err := validate.Struct(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
