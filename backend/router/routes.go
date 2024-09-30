@@ -27,7 +27,7 @@ func InitializeRoutes(router *gin.Engine) {
 	{
 		// Rotas públicas (sem proteção JWT)
 		v1.POST("/login", handler.LoginHandler) // Login e geração do token JWT
-
+		v1.POST("/usuarios", handler.CreateUsuariosHandler)
 		// Rotas protegidas com JWT
 		v1.Use(middleware.AuthMiddleware())
 		{
@@ -37,13 +37,6 @@ func InitializeRoutes(router *gin.Engine) {
 			v1.POST("/vagas", handler.CreateVagasHandler)
 			v1.PUT("/vagas/:id", handler.UpdateVagasHandler)
 			v1.DELETE("/vagas/:id", handler.DeleteVagasHandler)
-
-			// Rotas para usuários
-			v1.GET("/usuarios", handler.ListUsuariosHandler)
-			v1.GET("/usuarios/:id", handler.ShowUsuariosHandler)
-			v1.POST("/usuarios", handler.CreateUsuariosHandler)
-			v1.PUT("/usuarios/:id", handler.UpdateUsuariosHandler)
-			v1.DELETE("/usuarios/:id", handler.DeleteUsuariosHandler)
 
 			// Rotas para veículos
 			v1.GET("/veiculos", handler.ListVeiculosHandler)

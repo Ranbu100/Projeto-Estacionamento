@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -67,6 +68,7 @@ func CreatePagamentosHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados invalidos"})
 		return
 	}
+
 	pagamentos := schemas.Pagamentos{
 		EntradasSaidasId: input.EntradasSaidasId,
 		Valor:            input.Valor,
@@ -93,7 +95,6 @@ func CreateReservasHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
 		return
 	}
-
 	// Criar nova reserva
 	reserva := schemas.Reservas{
 		VagaId:    input.VagaId,
@@ -111,15 +112,6 @@ func CreateReservasHandler(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "Reserva criada com sucesso"})
 }
 
-// @Summary Cria um usuário
-// @Description Cria um novo usuário no sistema
-// @Tags usuários
-// @Accept  json
-// @Produce  json
-// @Param   usuario  body  handler.CreateUsuarioInput  true  "Dados do usuário"
-// @Success 201 {object} gin.H{"message": "Usuário criado com sucesso"}
-// @Failure 400 {object} gin.H{"error": "Dados inválidos"}
-// @Router /usuarios [post]
 func CreateUsuariosHandler(c *gin.Context) {
 	var input struct {
 		Nome     string `json:"nome"`
@@ -133,6 +125,8 @@ func CreateUsuariosHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
 		return
 	}
+
+	//Validar a struct de entrada (input)
 
 	// Verificar se o email já existe
 	var usuarioExistente schemas.Usuarios
@@ -171,6 +165,7 @@ func LoginHandler(ctx *gin.Context) {
 
 	// JSON recebido
 	if err := ctx.ShouldBindJSON(&input); err != nil {
+		log.Println("Erro no JSON recebido:", err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
 		return
 	}
@@ -179,27 +174,33 @@ func LoginHandler(ctx *gin.Context) {
 	adminEmail := os.Getenv("ADMIN_EMAIL")
 	adminSenha := os.Getenv("ADMIN_SENHA")
 
+	log.Println("Admin Email:", adminEmail)
+	log.Println("Admin Senha:", adminSenha)
+
 	// Caso seja admin, checar as credenciais diretamente
 	if input.Email == adminEmail && input.Senha == adminSenha {
-		// Gerar token JWT para o admin
 		token, err := middleware.GenerateJWT("admin")
 		if err != nil {
+			log.Println("Erro ao gerar token:", err)
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao gerar token"})
 			return
 		}
+		log.Println("Login de admin bem-sucedido")
 		ctx.JSON(http.StatusOK, gin.H{"token": token, "message": "Login de admin bem-sucedido!"})
 		return
 	}
 
-	// Caso contrário, continue verificando no banco de dados para usuários comuns
+	// Caso contrário, verificar no banco de dados para usuários comuns
 	var usuario schemas.Usuarios
 	if err := db.Where("email = ?", input.Email).First(&usuario).Error; err != nil {
+		log.Println("Usuário não encontrado:", input.Email)
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Credenciais inválidas"})
 		return
 	}
 
 	// Comparar senhas
 	if !utils.CheckPasswordHash(input.Senha, usuario.Senha) {
+		log.Println("Falha na comparação da senha")
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Credenciais inválidas"})
 		return
 	}
@@ -207,11 +208,13 @@ func LoginHandler(ctx *gin.Context) {
 	// Gerar token JWT para o usuário comum
 	token, err := middleware.GenerateJWT(usuario.Email)
 	if err != nil {
+		log.Println("Erro ao gerar token para o usuário:", err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao gerar token"})
 		return
 	}
 
 	// Se a senha estiver correta
+	log.Println("Login bem-sucedido para usuário:", usuario.Email)
 	ctx.JSON(http.StatusOK, gin.H{"token": token, "message": "Login bem-sucedido"})
 }
 
@@ -226,6 +229,8 @@ func CreateVagasHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
 		return
 	}
+
+	//Validaçao vagas
 
 	// Criar nova vaga
 	vaga := schemas.Vagas{
