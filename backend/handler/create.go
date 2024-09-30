@@ -9,6 +9,7 @@ import (
 	"github.com/Ranbu100/Projeto-Estacionamento/middleware"
 	"github.com/Ranbu100/Projeto-Estacionamento/schemas"
 	"github.com/Ranbu100/Projeto-Estacionamento/utils"
+	"github.com/Ranbu100/Projeto-Estacionamento/validator"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,6 +24,18 @@ func CreateEntradasSaidasHandler(ctx *gin.Context) {
 	// Bind JSON para a struct de input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
+		return
+	}
+
+	//Validando Entrada e saida
+	entradaSaidaData := validator.EntradaSaida{
+		VeiculoId:   input.VeiculoID,
+		DataEntrada: input.Entrada,
+		DataSaida:   *input.Saida,
+	}
+
+	if err := validator.ValidateEntradaSaida(entradaSaidaData); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -63,9 +76,21 @@ func CreatePagamentosHandler(ctx *gin.Context) {
 		Valor            float64 `json:"valor_pago"`
 		Metodo           string  `json:"metodo_pagamento"`
 		Status           string  `json:"status_pagamento"`
+		UsuarioId        uint    `json:"Usuario_Id"`
 	}
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados invalidos"})
+		return
+	}
+
+	//Validando pagamento
+	pagamentoData := validator.Pagamento{
+		Valor:     input.Valor,
+		UsuarioId: input.UsuarioId,
+	}
+
+	if err := validator.ValidatePagamento(pagamentoData); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -84,17 +109,31 @@ func CreatePagamentosHandler(ctx *gin.Context) {
 }
 func CreateReservasHandler(c *gin.Context) {
 	var input struct {
-		VagaId    uint      `json:"vaga_id"`
-		UsuarioId uint      `json:"usuario_id"`
-		DataHora  time.Time `gorm:"not null" json:"data_hora_reserva"`
-		Duracao   uint      `gorm:"not null" json:"duracao"`
-		Status    string    `gorm:"size:50;not null" json:"status_reserva"`
+		VagaId      uint      `json:"vaga_id"`
+		UsuarioId   uint      `json:"usuario_id"`
+		DataHora    time.Time `gorm:"not null" json:"data_hora_reserva"`
+		Duracao     uint      `gorm:"not null" json:"duracao"`
+		Status      string    `gorm:"size:50;not null" json:"status_reserva"`
+		DataReserva string    `json:"DataReserva"`
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
 		return
 	}
+
+	//Validando reservas
+	reservationData := validator.Reserva{
+		UsuarioId:   input.UsuarioId,
+		VagaId:      input.VagaId,
+		DataReserva: input.DataReserva,
+	}
+
+	if err := validator.ValidateReserva(reservationData); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	// Criar nova reserva
 	reserva := schemas.Reservas{
 		VagaId:    input.VagaId,
@@ -126,7 +165,16 @@ func CreateUsuariosHandler(c *gin.Context) {
 		return
 	}
 
+	userData := validator.User{
+		Nome:     input.Nome,
+		Email:    input.Email,
+		Telefone: input.Telefone,
+	}
 	//Validar a struct de entrada (input)
+	if err := validator.ValidateUser(userData); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	// Verificar se o email já existe
 	var usuarioExistente schemas.Usuarios
@@ -231,6 +279,15 @@ func CreateVagasHandler(c *gin.Context) {
 	}
 
 	//Validaçao vagas
+	vagaData := validator.Vagas{
+		Status: input.Status,
+		Tipo:   input.TipoVaga,
+	}
+
+	if err := validator.ValidateVaga(vagaData); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	// Criar nova vaga
 	vaga := schemas.Vagas{
@@ -257,6 +314,18 @@ func CreateVeiculosHandler(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
+		return
+	}
+
+	//Validaçao veiculos
+
+	veiculoData := validator.Veiculo{
+		Modelo: input.Modelo,
+		Placa:  input.Placa,
+	}
+
+	if err := validator.ValidateVeiculo(veiculoData); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 

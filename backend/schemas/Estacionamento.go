@@ -3,12 +3,11 @@ package schemas
 import "time"
 
 type Usuarios struct {
-	Id          uint   `gorm:"primaryKey;autoIncrement" json:"id"`
-	Nome        string `gorm:"size:100;not null" json:"nome"`
-	Email       string `gorm:"size:100;not null;unique" json:"email"`
-	Senha       string `gorm:"size:100;not null" json:"senha"`
-	TipoUsuario string `gorm:"size:50;not null" json:"tipo_usuario"`
-	Telefone    string `gorm:"size:50;not null" json:"telefone"`
+	Id       uint   `gorm:"primaryKey;autoIncrement" json:"id"`
+	Nome     string `gorm:"size:100;not null" json:"nome"`
+	Email    string `gorm:"size:100;not null;unique" json:"email"`
+	Senha    string `gorm:"size:100;not null" json:"senha"`
+	Telefone string `gorm:"size:50;not null" json:"telefone"`
 }
 
 type Vagas struct {
