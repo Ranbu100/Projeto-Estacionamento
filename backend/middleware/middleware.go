@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"errors"
 	"net/http"
 	"os"
 	"strings"
@@ -48,5 +49,9 @@ func GenerateJWT(userID string) (string, error) {
 		"exp":     time.Now().Add(time.Hour * 24).Unix(), // Expira em 24 horas
 	})
 	secret := os.Getenv("JWT_SECRET")
+	if secret == "" {
+		return "", errors.New("JWT_SECRET não está definido")
+	}
 	return token.SignedString([]byte(secret))
+
 }
