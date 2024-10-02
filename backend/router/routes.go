@@ -31,6 +31,12 @@ func InitializeRoutes(router *gin.Engine) {
 		// Rotas protegidas com JWT
 		v1.Use(middleware.AuthMiddleware())
 		{
+			//Rotas de Administradores
+			v1.Use(middleware.AdminMiddleware())
+			{
+				v1.PUT("/vagas/:id/block", handler.BlockUnblockVagaHandler)
+			}
+
 			// Rotas para as vagas
 			v1.GET("/vagas", handler.ListVagasHandler)
 			v1.GET("/vagas/:id", handler.ShowVagasHandler)

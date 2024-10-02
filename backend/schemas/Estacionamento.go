@@ -8,6 +8,7 @@ type Usuarios struct {
 	Email    string `gorm:"size:100;not null;unique" json:"email"`
 	Senha    string `gorm:"size:100;not null" json:"senha"`
 	Telefone string `gorm:"size:50;not null" json:"telefone"`
+	Role     string
 }
 
 type Vagas struct {

@@ -11,6 +11,11 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
+type User struct {
+	ID   string
+	Role string
+}
+
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Extrair o token do cabeçalho Authorization
@@ -43,9 +48,10 @@ func AuthMiddleware() gin.HandlerFunc {
 	}
 }
 
-func GenerateJWT(userID string) (string, error) {
+func GenerateJWT(userID, role string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": userID,
+		"role":    role,
 		"exp":     time.Now().Add(time.Hour * 24).Unix(), // Expira em 24 horas
 	})
 	secret := os.Getenv("JWT_SECRET")
@@ -54,4 +60,38 @@ func GenerateJWT(userID string) (string, error) {
 	}
 	return token.SignedString([]byte(secret))
 
+}
+
+func AdminMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		user, err := GetUserFromToken(c)
+		if err != nil || user.Role != "admim" {
+			c.JSON(http.StatusForbidden, gin.H{"error": "Acesso negado"})
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
+}
+func GetUserFromToken(c *gin.Context) (*User, error) {
+	authHeader := c.GetHeader("Authorization")
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("JWT_SECRET")), nil
+	})
+
+	if err != nil || !token.Valid {
+		return nil, err
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, errors.New("não foi possível obter os dados do usuário")
+	}
+
+	userID := claims["user_id"].(string)
+	role := claims["role"].(string) // Certifique-se de que você armazena o papel do usuário no token
+
+	return &User{ID: userID, Role: role}, nil
 }
