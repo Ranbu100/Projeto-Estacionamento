@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from "next/navigation";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 type Props = {
     nome: string;

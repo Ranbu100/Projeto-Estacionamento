@@ -27,9 +27,8 @@ export function Loginform() {
         senha: data.senha,
       });
 
-      if (logged.success) {
-        setIsLogged(true);
-      }
+      setIsLogged(logged.success);
+  
     } catch (error) {
       console.error('Erro ao cadastrar usuário:', error);
       alert('Erro ao realizar cadastro. Tente novamente.');
