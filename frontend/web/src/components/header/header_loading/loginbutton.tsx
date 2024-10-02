@@ -1,5 +1,6 @@
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Button } from "../ui/button";
+
 
 type Props = {
     classname: string;

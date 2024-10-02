@@ -1,10 +1,10 @@
 "use client"
 import Image from "next/image";
-import Logo_header from "../../../public/images/logo_header.svg";
-import { ItemMenu } from "../itens/itemMenu";
-import { Registerbutton } from "../itens/register_button";
+import Logo_header from "../../../../public/images/logo_header.svg";
+import { ItemMenu } from "./itemMenu";
+import { Registerbutton } from "./register_button";
 import { useRouter } from "next/navigation";
-import { Loginbutton } from "../itens/loginbutton";
+import { Loginbutton } from "./loginbutton";
 export function Header() {
     const  Router  = useRouter();
     return (
