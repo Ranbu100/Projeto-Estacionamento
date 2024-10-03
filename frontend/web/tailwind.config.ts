@@ -10,7 +10,9 @@ const config: Config = {
   theme: {
   	extend: {
   		backgroundImage: {
-  			'background-estacionamento': 'url("/background_estacionamento.png")'
+  			'background-estacionamento': 'url("/background_estacionamento.png")',
+			'background-homepage': 'url("/background_homepage.jpeg")',
+
   		},
   		colors: {
   			'primary-blue': '#106E80',
