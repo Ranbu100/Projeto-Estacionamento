@@ -222,12 +222,9 @@ func LoginHandler(ctx *gin.Context) {
 	adminEmail := os.Getenv("ADMIN_EMAIL")
 	adminSenha := os.Getenv("ADMIN_SENHA")
 
-	log.Println("Admin Email:", adminEmail)
-	log.Println("Admin Senha:", adminSenha)
-
 	// Caso seja admin, checar as credenciais diretamente
 	if input.Email == adminEmail && input.Senha == adminSenha {
-		token, err := middleware.GenerateJWT("admin")
+		token, err := middleware.GenerateJWT("admin", "admin") // Adiciona o papel
 		if err != nil {
 			log.Println("Erro ao gerar token:", err)
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao gerar token"})
@@ -253,8 +250,8 @@ func LoginHandler(ctx *gin.Context) {
 		return
 	}
 
-	// Gerar token JWT para o usuário comum
-	token, err := middleware.GenerateJWT(usuario.Email)
+	// Gerar token JWT para o usuário comum com a role
+	token, err := middleware.GenerateJWT(usuario.Email, usuario.Role) // Inclui a role do usuário
 	if err != nil {
 		log.Println("Erro ao gerar token para o usuário:", err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao gerar token"})

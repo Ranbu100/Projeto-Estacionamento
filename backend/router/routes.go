@@ -28,9 +28,21 @@ func InitializeRoutes(router *gin.Engine) {
 		// Rotas públicas (sem proteção JWT)
 		v1.POST("/login", handler.LoginHandler) // Login e geração do token JWT
 		v1.POST("/usuarios", handler.CreateUsuariosHandler)
+		v1.GET("/usuarios/:id", handler.ShowUsuariosHandler)
+		v1.GET("/usuarios", handler.ListUsuariosHandler)
+		v1.DELETE("/usuarios/:id", handler.DeleteUsuariosHandler)
+		v1.PUT("/usuarios/:id", handler.UpdateUsuariosHandler)
+
 		// Rotas protegidas com JWT
 		v1.Use(middleware.AuthMiddleware())
 		{
+			//Rotas de Administradores
+			v1.Use(middleware.AdminMiddleware())
+			{
+				v1.PUT("/vagas/:id/block", handler.BlockVagasHandler)
+				v1.PUT("/vagas/:id/unblock", handler.UnblockVagasHandler)
+			}
+
 			// Rotas para as vagas
 			v1.GET("/vagas", handler.ListVagasHandler)
 			v1.GET("/vagas/:id", handler.ShowVagasHandler)
