@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/Ranbu100/Projeto-Estacionamento/enums"
 	"github.com/Ranbu100/Projeto-Estacionamento/middleware"
 	"github.com/Ranbu100/Projeto-Estacionamento/schemas"
 	"github.com/Ranbu100/Projeto-Estacionamento/utils"
@@ -265,34 +266,56 @@ func LoginHandler(ctx *gin.Context) {
 
 func CreateVagasHandler(c *gin.Context) {
 	var input struct {
-		NumeroVaga int    `json:"numero_vaga"`
-		TipoVaga   string `json:"tipo_vaga"`
-		Status     string `json:"status_vaga"`
+		NumeroVaga int   `json:"numero_vaga"`
+		TipoVaga   uint8 `json:"tipo_vaga"` // Altere o tipo para uint8 para corresponder à enumeração
+		Status     int   `json:"status_vaga"`
 	}
 
+	// Verificar se o JSON foi recebido corretamente
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
 		return
 	}
 
-	//Validaçao vagas
-	vagaData := validator.Vagas{
-		Status: input.Status,
-		Tipo:   input.TipoVaga,
+	// Verificar se já existe uma vaga com o mesmo número
+	var vagaExistente schemas.Vagas
+	if err := db.Where("numero_vaga = ?", input.NumeroVaga).First(&vagaExistente).Error; err == nil {
+		c.JSON(http.StatusConflict, gin.H{"error": "Já existe uma vaga com este número"})
+		return
 	}
 
-	if err := validator.ValidateVaga(vagaData); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// Validação do tipo de vaga usando os enums
+	if !enums.TipoVagaValido(input.TipoVaga) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Tipo de vaga inválido"})
+		return
+	}
+
+	// Validação do status da vaga usando os enums
+	if !enums.StatusVagaValido(input.Status) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Status de vaga inválido"})
+		return
+	}
+
+	// Mapear o tipo de vaga: enums.TipoCarro = 1 (carro), enums.TipoMoto = 2 (moto)
+	var tipoVaga uint8
+	switch input.TipoVaga {
+	case 1:
+		tipoVaga = enums.TipoCarro
+	case 2:
+		tipoVaga = enums.TipoMoto
+	default:
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Tipo de vaga inválido"})
 		return
 	}
 
 	// Criar nova vaga
 	vaga := schemas.Vagas{
 		NumeroVaga: input.NumeroVaga,
-		TipoVaga:   input.TipoVaga,
+		TipoVaga:   tipoVaga,
 		Status:     input.Status,
 	}
 
+	// Salvar no banco de dados
 	if err := db.Create(&vaga).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao salvar vaga no banco de dados"})
 		return
@@ -309,24 +332,25 @@ func CreateVeiculosHandler(c *gin.Context) {
 		UsuarioId uint   `json:"usuario_id"`
 	}
 
+	// Verificar se o JSON foi recebido corretamente
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
 		return
 	}
 
-	//Validaçao veiculos
-
+	// Validação dos dados do veículo
 	veiculoData := validator.Veiculo{
 		Modelo: input.Modelo,
 		Placa:  input.Placa,
 	}
 
+	// Validar o veículo usando o pacote de validação
 	if err := validator.ValidateVeiculo(veiculoData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Criar novo veículo
+	// Criar novo veículo com os dados fornecidos
 	veiculo := schemas.Veiculos{
 		Placa:     input.Placa,
 		Modelo:    input.Modelo,
@@ -334,10 +358,12 @@ func CreateVeiculosHandler(c *gin.Context) {
 		UsuarioId: input.UsuarioId,
 	}
 
+	// Salvar veículo no banco de dados
 	if err := db.Create(&veiculo).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao salvar veículo no banco de dados"})
 		return
 	}
 
+	// Retornar sucesso
 	c.JSON(http.StatusCreated, gin.H{"message": "Veículo criado com sucesso"})
 }

@@ -32,6 +32,7 @@ func InitializeRoutes(router *gin.Engine) {
 		v1.GET("/usuarios", handler.ListUsuariosHandler)
 		v1.DELETE("/usuarios/:id", handler.DeleteUsuariosHandler)
 		v1.PUT("/usuarios/:id", handler.UpdateUsuariosHandler)
+		v1.POST("/vagas", handler.CreateVagasHandler)
 
 		// Rotas protegidas com JWT
 		v1.Use(middleware.AuthMiddleware())
@@ -46,7 +47,7 @@ func InitializeRoutes(router *gin.Engine) {
 			// Rotas para as vagas
 			v1.GET("/vagas", handler.ListVagasHandler)
 			v1.GET("/vagas/:id", handler.ShowVagasHandler)
-			v1.POST("/vagas", handler.CreateVagasHandler)
+			//v1.POST("/vagas", handler.CreateVagasHandler)
 			v1.PUT("/vagas/:id", handler.UpdateVagasHandler)
 			v1.DELETE("/vagas/:id", handler.DeleteVagasHandler)
 

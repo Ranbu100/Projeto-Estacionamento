@@ -222,9 +222,9 @@ func UpdateVeiculosHandler(ctx *gin.Context) {
 
 func UpdateVagasHandler(ctx *gin.Context) {
 	var input struct {
-		NumeroVaga int    `json:"numero_vaga"`
-		TipoVaga   string `json:"tipo_vaga"`
-		Status     string `json:"status"`
+		NumeroVaga int   `json:"numero_vaga"`
+		TipoVaga   uint8 `json:"tipo_vaga"`
+		Status     int   `json:"status_vaga"`
 	}
 
 	// Bind JSON

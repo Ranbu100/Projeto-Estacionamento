@@ -16,12 +16,12 @@ func BlockVagasHandler(c *gin.Context) {
 		return
 	}
 
-	if vaga.Status == "Bloqueada" {
+	if vaga.Status == 2 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Vaga ja esta bloqueada"})
 		return
 	}
 
-	vaga.Status = "Ocupada"
+	vaga.Status = 2
 	if err := db.Save(&vaga).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao bloquear vaga"})
 		return
