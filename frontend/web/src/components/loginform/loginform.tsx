@@ -2,7 +2,6 @@
 import {
   Card,
   CardContent,
-
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -30,8 +29,8 @@ export function Loginform() {
       setIsLogged(logged.success);
   
     } catch (error) {
-      console.error('Erro ao cadastrar usuário:', error);
-      alert('Erro ao realizar cadastro. Tente novamente.');
+      console.error('Erro ao logar usuário:', error);
+      alert('Erro ao realizar login. Tente novamente.');
     }
   };
   return (

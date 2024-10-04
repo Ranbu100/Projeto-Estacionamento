@@ -1,5 +1,7 @@
-export default function Home(){
-    return(
-        <h1 className="h-full w-full justify-center items-center">HOME PAGE</h1>
+import { HomeSection } from "@/components/homesection/homesection";
+
+export default function Home() {
+    return (
+        <HomeSection />
     )
 }

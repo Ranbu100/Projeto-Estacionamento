@@ -1,3 +1,4 @@
+'use client'
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Senhainput } from "./input_senha";
@@ -34,7 +35,7 @@ export const RenderField = ({ control, name, label, type, errors, ...rest }: any
               />
             ) : (
               <Input
-                type={type === "email" && name !== "nome" ? "email" : "tel"}
+                type={type == "email" && name != "nome" ? "email" : "tel"}
                 className="text-white"
                 placeholder={`Escreva seu ${label.toLowerCase()}`}
                 value={field.value ?? ''}

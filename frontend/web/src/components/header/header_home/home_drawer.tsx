@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { ListBulletIcon } from "@radix-ui/react-icons";
+import { AccountButton } from './account_button';
 
 export function HomeDrawer() {
     const [isOpen, setIsOpen] = useState(false);
@@ -12,7 +13,7 @@ export function HomeDrawer() {
     return (
         <div>
             <Button variant={"ghost"} onClick={toggleDrawer} className='text-white'>
-                <ListBulletIcon className='size-6'/>
+                <ListBulletIcon className='size-6' />
             </Button>
 
             {isOpen && (
@@ -22,18 +23,17 @@ export function HomeDrawer() {
                 />
             )}
 
-            {/* Drawer que desliza da direita */}
             <div
-                className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'
-                    }`}
+                className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
             >
-                <div className="p-4">
-                    <h2 className="text-lg font-semibold">Drawer Menu</h2>
-                    <p>Conteúdo do Drawer</p>
-
-                    {/* Botão para fechar o drawer */}
-                    <Button onClick={toggleDrawer} className="mt-4">
-                        Fechar Drawer
+                <div className="flex flex-col h-full justify-between  p-4">
+                   <div className='flex flex-col p-4 space-y-3'>
+                   <AccountButton />
+                   </div>
+                    
+                    
+                    <Button onClick={toggleDrawer} variant={'ghost'} className=" text-red-500">
+                        Fechar
                     </Button>
                 </div>
             </div>
