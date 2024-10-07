@@ -10,7 +10,7 @@ import (
 type User struct {
 	Nome     string `validate:"required,min=3,max=50"`
 	Email    string `validate:"required,email"`
-	Telefone string `validate:"required,len-9"`
+	Telefone string `validate:"required,len=11"`
 }
 
 type Veiculo struct {
