@@ -127,15 +127,47 @@ func ValidateVaga(vaga Vagas) error {
 
 func ValidateEntradaSaida(entradaSaida EntradaSaida) error {
 	validate := validator.New()
-	return validate.Struct(entradaSaida)
+
+	err := validate.Struct(entradaSaida)
+	if err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			switch err.Field() {
+			case "DataEntrada":
+				return fmt.Errorf("data de entrada deve estar no formato YYYY-MM-DD HH:MM:SS")
+			case "DataSaida":
+				return fmt.Errorf("data de saída deve ser maior que a data de entrada e estar no formato correto")
+			}
+		}
+	}
+	return err
 }
 
 func ValidatePagamento(pagamento Pagamento) error {
 	validate := validator.New()
-	return validate.Struct(pagamento)
+
+	err := validate.Struct(pagamento)
+	if err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			switch err.Field() {
+			case "Valor":
+				return fmt.Errorf("valor deve ser maior ou igual a zero")
+			}
+		}
+	}
+	return err
 }
 
 func ValidateReserva(reserva Reserva) error {
 	validate := validator.New()
-	return validate.Struct(reserva)
+
+	err := validate.Struct(reserva)
+	if err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			switch err.Field() {
+			case "DataReserva":
+				return fmt.Errorf("data da reserva deve estar no formato YYYY-MM-DD HH:MM:SS")
+			}
+		}
+	}
+	return err
 }
