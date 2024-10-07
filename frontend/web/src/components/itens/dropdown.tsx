@@ -1,30 +1,36 @@
-// src/components/Dropdown.tsx
 import * as React from "react";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Controller } from "react-hook-form";
 
 interface DropdownProps {
   label: string;
-  options: string[];
-  value: string;
-  onChange: (value: string) => void;
+  options: { label: string, value: number }[];
+  control: any;
+  name: string;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ label, options, value, onChange }) => {
+const Dropdown: React.FC<DropdownProps> = ({ label, options, control, name }) => {
   return (
     <div>
-      <label className=" block text-sm font-medium text-white">{label}</label>
-      <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="text-white">
-          <SelectValue placeholder="Selecione uma opção" />
-        </SelectTrigger>
-        <SelectContent>
-          {options.map((option, index) => (
-            <SelectItem key={index} value={option}>
-              {option}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <label className="block text-sm font-medium text-white">{label}</label>
+      <Controller
+        control={control}
+        name={name}
+        render={({ field }) => (
+          <Select value={field.value} onValueChange={field.onChange}>
+            <SelectTrigger className="text-white">
+              <SelectValue placeholder="Selecione uma opção" />
+            </SelectTrigger>
+            <SelectContent>
+              {options.map((option, index) => (
+                <SelectItem key={index} value={option.value.toString()}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+      />
     </div>
   );
 };

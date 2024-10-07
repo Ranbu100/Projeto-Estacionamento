@@ -13,7 +13,6 @@ import { useForm } from "react-hook-form";
 import { VagaService } from "@/services/admin_service/vagas/vagas_service";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { AlertLoginConfirm } from "@/components/loginform/alertlogin";
 import Dropdown from "@/components/itens/dropdown";
 
 export function CriarVagasForm() {
@@ -21,13 +20,15 @@ export function CriarVagasForm() {
         resolver: yupResolver(formSchemaCreate),
       });
       const [isCreate, setIsCreate] = useState(false);
-      const [selectedOption, setSelectedOption] = useState("");
-      const tipos = ['Carro', 'Moto'];
-      const onSubmit = async (data: {tipo_vaga: string, numero_vaga: number}) => {
+      const tipos = [
+        { label: 'Carro', value: 1 },
+        { label: 'Moto', value: 2 }
+      ];
+      const onSubmit = async (data: { tipo_vaga: string; numero_vaga: number}) => {
         try {
             const createdvaga = await new VagaService().CreateVaga({
                 numero_vaga: data.numero_vaga,
-                tipo_vaga: data.tipo_vaga,
+                tipo_vaga: (data.tipo_vaga == '1' ? 1 : 2),
                 status_vaga: 1,
             },);
             setIsCreate(createdvaga.success);
@@ -46,7 +47,7 @@ export function CriarVagasForm() {
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
                     <RenderField control={control} name="numero_vaga" label="Numero da Vaga" errors={errors} type={undefined} /> 
-                    <Dropdown label="Selecione o tipo da vaga" options={tipos} value={selectedOption} onChange={setSelectedOption}></Dropdown>
+                    <Dropdown label="Selecione o tipo da vaga" options={tipos} name="tipo_vaga" control={control}></Dropdown>
                     <Button className="bg-white text-blue-900 " type="submit" >Criar</Button>
                     </form>
                    

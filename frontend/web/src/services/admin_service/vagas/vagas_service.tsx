@@ -18,8 +18,9 @@ export class VagaService{
                 'Content-Type': 'application/json'
             }}
          )
+         console.log(vagaData);
          
-         if (response.status == 200) {
+         if (response.status == 201) {
             console.log('Vaga criada com sucesso!');
             console.log(response.status);
             return { success: true }
@@ -29,7 +30,7 @@ export class VagaService{
         }
        } catch (error) {
         console.log(vagaData);
-        console.error("Erro ao Criar a classe", error);
+        console.error("Erro ao Criar a Vaga", error);
             return { success: false}
        }
     }

@@ -1,6 +1,6 @@
 interface VagaData {
     numero_vaga: number;
-    tipo_vaga: string;
+    tipo_vaga: number;
     status_vaga: number;
 }
 interface VagasResponse {
