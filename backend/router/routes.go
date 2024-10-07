@@ -28,28 +28,21 @@ func InitializeRoutes(router *gin.Engine) {
 		// Rotas públicas (sem proteção JWT)
 		v1.POST("/login", handler.LoginHandler) // Login e geração do token JWT
 		v1.POST("/usuarios", handler.CreateUsuariosHandler)
-		v1.GET("/usuarios/:id", handler.ShowUsuariosHandler)
-		v1.GET("/usuarios", handler.ListUsuariosHandler)
-		v1.DELETE("/usuarios/:id", handler.DeleteUsuariosHandler)
-		v1.PUT("/usuarios/:id", handler.UpdateUsuariosHandler)
-		v1.POST("/vagas", handler.CreateVagasHandler)
-
 		// Rotas protegidas com JWT
 		v1.Use(middleware.AuthMiddleware())
 		{
-			//Rotas de Administradores
-			v1.Use(middleware.AdminMiddleware())
-			{
-				v1.PUT("/vagas/:id/block", handler.BlockVagasHandler)
-				v1.PUT("/vagas/:id/unblock", handler.UnblockVagasHandler)
-			}
-
 			// Rotas para as vagas
 			v1.GET("/vagas", handler.ListVagasHandler)
 			v1.GET("/vagas/:id", handler.ShowVagasHandler)
-			//v1.POST("/vagas", handler.CreateVagasHandler)
+			v1.POST("/vagas", handler.CreateVagasHandler)
 			v1.PUT("/vagas/:id", handler.UpdateVagasHandler)
 			v1.DELETE("/vagas/:id", handler.DeleteVagasHandler)
+
+			//Rotas para usuarios
+			v1.GET("/usuarios/:id", handler.ShowUsuariosHandler)
+			v1.GET("/usuarios", handler.ListUsuariosHandler)
+			v1.DELETE("/usuarios/:id", handler.DeleteUsuariosHandler)
+			v1.PUT("/usuarios/:id", handler.UpdateUsuariosHandler)
 
 			// Rotas para veículos
 			v1.GET("/veiculos", handler.ListVeiculosHandler)
@@ -78,6 +71,13 @@ func InitializeRoutes(router *gin.Engine) {
 			v1.POST("/reservas", handler.CreateReservasHandler)
 			v1.PUT("/reservas/:id", handler.UpdateReservasHandler)
 			v1.DELETE("/reservas/:id", handler.DeleteReservasHandler)
+
+			//Rotas de Administradores
+			v1.Use(middleware.AdminMiddleware())
+			{
+				v1.PUT("/vagas/:id/block", handler.BlockVagasHandler)
+				v1.PUT("/vagas/:id/unblock", handler.UnblockVagasHandler)
+			}
 		}
 	}
 }

@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/Ranbu100/Projeto-Estacionamento/enums"
 	"github.com/Ranbu100/Projeto-Estacionamento/schemas"
 	"github.com/gin-gonic/gin"
 )
@@ -46,6 +47,32 @@ func ListUsuariosHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"usuarios": usuarios})
 }
 
+func mapStatusVaga(status int) string {
+	switch status {
+	case enums.Disponivel:
+		return "Disponível"
+	case enums.Ocupada:
+		return "Ocupada"
+	case enums.Reservada:
+		return "Reservada"
+	case enums.Manutencao:
+		return "Manutenção"
+	default:
+		return "Desconhecido"
+	}
+}
+
+func mapTipoVaga(tipo uint8) string {
+	switch tipo {
+	case enums.TipoCarro:
+		return "Carro"
+	case enums.TipoMoto:
+		return "Moto"
+	default:
+		return "Desconhecido"
+	}
+}
+
 func ListVagasHandler(ctx *gin.Context) {
 	var vagas []schemas.Vagas
 
@@ -55,8 +82,26 @@ func ListVagasHandler(ctx *gin.Context) {
 		return
 	}
 
-	// Retornar a lista de vagas em JSON
-	ctx.JSON(http.StatusOK, gin.H{"vagas": vagas})
+	var response []struct {
+		NumeroVaga int    `json:"numero_vaga"`
+		TipoVaga   string `json:"tipo_vaga"`
+		Status     string `json:"status_vaga"`
+	}
+
+	for _, vaga := range vagas {
+		response = append(response, struct {
+			NumeroVaga int    `json:"numero_vaga"`
+			TipoVaga   string `json:"tipo_vaga"`
+			Status     string `json:"status_vaga"`
+		}{
+			NumeroVaga: vaga.NumeroVaga,
+			TipoVaga:   mapTipoVaga(vaga.TipoVaga), // Convertendo para texto
+			Status:     mapStatusVaga(vaga.Status), // Convertendo para texto
+		})
+	}
+
+	// Retornar o JSON corretamente
+	ctx.JSON(http.StatusOK, response)
 }
 
 func ListVeiculosHandler(ctx *gin.Context) {
