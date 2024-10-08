@@ -3,13 +3,13 @@ Folha de Requisitos: Sistema de Estacionamento
 1. Requisitos Funcionais
  
 1. Cadastro e Autenticação de Usuários
-   - O sistema deve permitir o cadastro de usuários (administradores e clientes).
-   - O sistema deve permitir o login e logout dos usuários.
-   ** - O sistema deve suportar a recuperação de senha.
+   - O sistema deve permitir o cadastro de usuários (administradores e clientes). --OK
+   - O sistema deve permitir o login e logout dos usuários. --OK
+   ** - O sistema deve suportar a recuperação de senha. --OK
 
 2. Gerenciamento de Vagas
-   - O administrador deve ser capaz de cadastrar e gerenciar vagas de estacionamento (número da vaga, tipo de vaga: carro, moto, etc.).
-   - O sistema deve exibir o status das vagas (disponível, ocupada, reservada).
+   - O administrador deve ser capaz de cadastrar e gerenciar vagas de estacionamento (número da vaga, tipo de vaga: carro, moto, etc.). -- OK
+   - O sistema deve exibir o status das vagas (disponível, ocupada, reservada). 
    - Deve ser possível bloquear/desbloquear vagas específicas (por exemplo, manutenção).
 
 3. Controle de Entrada e Saída de Veículos
@@ -46,7 +46,7 @@ Folha de Requisitos: Sistema de Estacionamento
 2. Requisitos Não Funcionais
 
 1. Segurança
-   - O sistema deve garantir que os dados dos usuários sejam armazenados de forma segura (criptografia de senhas e informações sensíveis).
+   - O sistema deve garantir que os dados dos usuários sejam armazenados de forma segura (criptografia de senhas e informações sensíveis). --OK
    - O sistema deve ter mecanismos de controle de acesso para diferentes níveis de usuários (administradores, operadores, clientes).
 
 2. Desempenho
@@ -57,10 +57,10 @@ Folha de Requisitos: Sistema de Estacionamento
    - O sistema deve ser capaz de escalar horizontalmente, permitindo a adição de novos módulos ou aumento de vagas sem perda de desempenho.
 
 4. Usabilidade
-   - O sistema deve ser intuitivo e fácil de usar, com uma interface clara para clientes e administradores.
+   - O sistema deve ser intuitivo e fácil de usar, com uma interface clara para clientes e administradores. --OK
 
 5. Compatibilidade
-   - O sistema deve ser compatível com os principais navegadores (Chrome, Firefox, Edge) e com diferentes tamanhos de tela.
+   - O sistema deve ser compatível com os principais navegadores (Chrome, Firefox, Edge) e com diferentes tamanhos de tela. --OK
 
 6. Manutenibilidade
    - O código do sistema deve seguir padrões de desenvolvimento que facilitem a manutenção e evolução do sistema.

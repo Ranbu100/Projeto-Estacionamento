@@ -16,7 +16,6 @@ var (
 )
 
 func main() {
-
 	logger = config.GetLogger("main")
 	//inciando o config
 	err := config.Init()
