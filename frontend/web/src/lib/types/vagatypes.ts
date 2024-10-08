@@ -6,6 +6,8 @@ interface VagaData {
 interface VagasResponse {
     success: boolean;
     message?: string;
+    vaga? : VagaData;
+    data?: VagaData[];
 }
 export type {
     VagaData,

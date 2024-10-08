@@ -12,7 +12,7 @@ export function HomeSection() {
                     <Button onClick={() => { router.push("/home/criarvagas") }} variant={"ghost"} className="h-1/6 w-1/4 p-10">
                         <span>Crie vagas</span>
                     </Button>
-                    <Button variant={"ghost"} className="h-1/6 w-1/4 p-10">
+                    <Button variant={"ghost"} onClick={() => { router.push("/home/gerenciarvagas") }} className="h-1/6 w-1/4 p-10">
                         <span>Gerencie vagas</span>
                     </Button>
                     <Button variant={"ghost"} className="h-1/6 w-1/4 p-10">

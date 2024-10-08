@@ -1,16 +1,13 @@
 'use client'
 import { VagaData, VagasResponse } from "@/lib/types/vagatypes";
 import { axiosInstance } from "@/services/axiosinstance";
-import { AxiosResponse } from "axios";
 import nookies from 'nookies';
-interface VagaResp {
-    message: string;
-}
+
 export class VagaService{
-    async CreateVaga(vagaData: VagaData, ctx?: any): Promise<VagasResponse>{
+    async CreateVaga(vagaData: VagaData): Promise<VagasResponse>{
         
        try {
-        const cookies = nookies.get(ctx);
+        const cookies = nookies.get();
         const token = cookies.token;
          const response = await axiosInstance.post("api/v1/vagas",vagaData,
             { headers: {
@@ -34,4 +31,35 @@ export class VagaService{
             return { success: false}
        }
     }
+    async GetAllVaga(): Promise<VagasResponse> {
+        try {
+            const cookies = nookies.get();
+            const token = cookies.token;
+            const response = await axiosInstance.get("api/v1/vagas", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (response.status === 200) {
+                const vagasData = response.data;
+    
+                if (vagasData && typeof vagasData === 'object') {
+                    // Converte o objeto em um array de VagaData
+                    const allVagas: VagaData[] = Object.values(vagasData);
+                    return { success: true, data: allVagas };
+                } else {
+                    return { success: false, message: "Dados mal formatados." };
+                }
+            } else {
+                return { success: false, message: "Erro ao carregar vagas" };
+            }
+        } catch (error) {
+            console.error("Erro ao Puxar a Vaga", error);
+            return { success: false, message: "Erro ao carregar vagas" };
+        }
+    }
+    
+    
 }

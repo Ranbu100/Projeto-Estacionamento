@@ -16,7 +16,7 @@ interface AlertRegisterConfirmProps {
 export function AlertRegisterConfirm({ show, onClose }: AlertRegisterConfirmProps) {
   const router = useRouter();
   return (
-    <div className="h-dvh w-dvw items-center justify-center">
+    <div className="h-5/6 w-5/6 items-center justify-center bg-fixed">
       <AlertDialog open={show} onOpenChange={onClose}>
         <AlertDialogContent>
           <AlertDialogHeader>

@@ -1,22 +1,23 @@
-export const normalizePhoneNumber = (value: string) => {
-    // Remove all non-numeric characters
-    const cleanedValue = value.replace(/\D/g, '')
-    
-    // If the resulting string is empty, return an empty string
-    if (!cleanedValue) return ''
-    
-    // Build the formatted string starting with the area code
-    let formattedValue = '(' + cleanedValue.substring(0, 2)
-    
-    // Add the area code, and if there are more than 2 characters, add the first group of 5 digits
-    if (cleanedValue.length > 2) {
-      formattedValue += ') ' + cleanedValue.substring(2, 7)
-    }
-    
-    // If there are more than 7 characters, add the hyphen and the final group of 4 digits
-    if (cleanedValue.length > 7) {
-      formattedValue += '-' + cleanedValue.substring(7, 11)
-    }
+export const formatPhoneNumber = (value: string): string => {
+  if (!value) return value;
   
-    return formattedValue
+  // Remove todos os caracteres não numéricos
+  const phoneNumber = value.replace(/\D/g, '');
+
+  // Limita o número de dígitos
+  if (phoneNumber.length > 11) {
+    return phoneNumber.slice(0, 11); // Limita a 11 dígitos numéricos
   }
+
+  // Formatar o número no formato (XX) XXXXX-XXXX
+  if (phoneNumber.length <= 10) {
+    return phoneNumber.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+  } else {
+    return phoneNumber.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+  }
+};
+
+
+export const unformatPhoneNumber = (value: string): string => {
+  return value.replace(/\D/g, '');
+};

@@ -8,22 +8,22 @@ import {
   } from "@/components/ui/alert-dialog";
   import { useRouter } from "next/navigation";
   
-  interface AlertLoginConfirmProps {
+  interface AlertLoginErrorsProps {
     show: boolean;
     onClose(open: boolean): void;
   }
   
-  export function AlertLoginConfirm({ show, onClose }: AlertLoginConfirmProps) {
+  export function AlertLoginErrors({ show, onClose }: AlertLoginErrorsProps) {
     const router = useRouter();
     return (
       <div className="h-5/6 w-5/6 items-center justify-center bg-fixed">
         <AlertDialog open={show} onOpenChange={onClose}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Login Realizado com Sucesso</AlertDialogTitle>
+              <AlertDialogTitle>Houve um erro no login, tente novamente</AlertDialogTitle>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogAction onClick={() => { router.push("/home") }} >Entrar</AlertDialogAction>
+              <AlertDialogAction onClick={() => { router.push("/login") }} >Tentar Novamente</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

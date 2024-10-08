@@ -14,11 +14,13 @@ import { UsuarioService } from "@/services/usuarios_service/usuarioservice";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { AlertLoginConfirm } from "./alertlogin";
+import { AlertLoginErrors } from "./errors";
 export function Loginform() {
   const { control, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(formSchema),
   });
   const [isLogged, setIsLogged] = useState(false);
+  const [loginError, setLoginError] = useState(false);
   const onSubmit = async (data: {email: string, senha: string}) => {
     try {
       const logged = await new UsuarioService().LoginUser({
@@ -27,7 +29,8 @@ export function Loginform() {
       });
 
       setIsLogged(logged.success);
-  
+      setLoginError(!logged.success);
+
     } catch (error) {
       console.error('Erro ao logar usuário:', error);
       alert('Erro ao realizar login. Tente novamente.');
@@ -45,9 +48,12 @@ export function Loginform() {
               <RenderField control={control} name="senha" label="Senha" errors={errors} type={"senha"} />              
               <Button className="bg-white text-blue-900 " type="submit">Logar</Button>
             </form>
-            {isLogged && (
-              <AlertLoginConfirm show={isLogged} onClose={() => {setIsLogged}}/>
-            )}
+            {isLogged ? (
+            <AlertLoginConfirm show={isLogged} onClose={() => setIsLogged(false)} />
+          ) : loginError ? (
+            <AlertLoginErrors show={true} onClose={() => setLoginError(false)} />
+          ) : null}
+
           </CardContent>
         </Card>
     </div>
